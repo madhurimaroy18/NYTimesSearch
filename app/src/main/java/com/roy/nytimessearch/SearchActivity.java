@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -58,7 +69,30 @@ public class SearchActivity extends AppCompatActivity {
 
     public void onArticleSearch(View view) {
         String query = etQuery.getText().toString();
-        Toast.makeText(this, "Search query is " + query, Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this, "Search query is " + query, Toast.LENGTH_LONG).show();
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
+        RequestParams params = new RequestParams();
+        params.add("api-key", "e263a172fe2a46bdb2be00d30eef9bc4");
+        params.add("q", query);
+        params.add("page", "0");
+
+        client.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+              //  super.onSuccess(statusCode, headers, response);
+                Log.d("DEBUG", response.toString());
+                JSONArray articlesJsonResults = null;
+
+                try {
+                    articlesJsonResults = response.getJSONObject("response").getJSONArray("docs");
+                    Log.d("DEBUG", articlesJsonResults.toString());
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }
 
