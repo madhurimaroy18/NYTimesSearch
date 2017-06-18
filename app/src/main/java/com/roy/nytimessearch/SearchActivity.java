@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
@@ -29,6 +31,8 @@ public class SearchActivity extends AppCompatActivity {
     EditText etQuery;
     GridView gvResult;
     Button btnSearch;
+
+    ArrayList<Article> articles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         etQuery = (EditText) findViewById(R.id.etQuery);
         gvResult = (GridView) findViewById(R.id.gvResult);
         btnSearch = (Button) findViewById(R.id.btnSearch);
+        articles = new ArrayList<>();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +91,9 @@ public class SearchActivity extends AppCompatActivity {
 
                 try {
                     articlesJsonResults = response.getJSONObject("response").getJSONArray("docs");
-                    Log.d("DEBUG", articlesJsonResults.toString());
+
+                    articles.addAll(Article.fromJSONArray(articlesJsonResults));
+                    Log.d("DEBUG", articles.toString());
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
