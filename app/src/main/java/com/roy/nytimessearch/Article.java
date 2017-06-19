@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Element;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -12,7 +13,7 @@ import java.util.Iterator;
  * Created by roy on 6/18/2017.
  */
 
-public class Article {
+public class Article implements Serializable{
 
     String webUrl;
     String headline;
